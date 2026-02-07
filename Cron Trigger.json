@@ -1,0 +1,83 @@
+{
+  "name": "Cron Trigger",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                6
+              ],
+              "triggerAtHour": 19,
+              "triggerAtMinute": 34
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2d368165-77d9-486d-9c3f-8c7a8f8b7b05",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "Test Cron Trigger Shett",
+        "sheetsUi": {
+          "sheetValues": [
+            {
+              "title": "Test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e069bedf-bce6-4f75-b356-20c509ab61ef",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YZCb6cgge2iJhFFK",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "28239da6-b27f-45d4-a53e-1d625b212f9c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cbecd77286d73e077db8db0d67eb575d2f553303747eac2913ccf23a0cb5635a"
+  },
+  "id": "ody0adxKCoCyMG-v8luVn",
+  "tags": []
+}

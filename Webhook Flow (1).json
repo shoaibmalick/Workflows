@@ -1,0 +1,139 @@
+{
+  "name": "Webhook Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e8e3750-2847-49d1-bd0f-1d873bf4ae58",
+              "name": "body",
+              "value": "={{ $json.body }}",
+              "type": "array"
+            },
+            {
+              "id": "03c8fcfa-94e0-4510-a1b5-7e126e7512c6",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -80
+      ],
+      "id": "54999f6a-b486-4cfb-890b-3f4cb01daa9f",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "JWT Token Webhook\nWe need to setup secret only and then need to create a JWT with that secret and n8n will verify using it"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "985ccf07-a762-44be-8885-b5c2fe04aa28",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Header Auth Webhook\n\nWe will define username and password in Webhook and same we need to send in the header when we are calling our n8n API from third party client application",
+        "height": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        112
+      ],
+      "id": "dd16beaa-d8ef-4de4-b037-712df7737bd6",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0c97f576-397f-4b15-bce4-cc53414ed60b",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        144
+      ],
+      "id": "4da92656-dadd-4bdd-bb9e-36f1d8a0a4c3",
+      "name": "Webhook-HeaderAuth",
+      "webhookId": "0c97f576-397f-4b15-bce4-cc53414ed60b",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zlLcNeZBHryIzdwu",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Shoaibmalick",
+        "authentication": "jwtAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        -80
+      ],
+      "id": "dffd71af-123c-49b5-a991-6e963debf4c4",
+      "name": "Webhook-JWTTOKEN",
+      "webhookId": "bf0c922d-77b0-4f7f-953b-37d13bfe298b",
+      "credentials": {
+        "jwtAuth": {
+          "id": "O3jEX8u0JzhCqG9M",
+          "name": "JWT Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields1": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook-JWTTOKEN": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "cfa422d0-821c-44d9-b8e8-feeff8ca6ece",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cbecd77286d73e077db8db0d67eb575d2f553303747eac2913ccf23a0cb5635a"
+  },
+  "id": "vZvBMpQgx8HrHAsXoOZTS",
+  "tags": []
+}
