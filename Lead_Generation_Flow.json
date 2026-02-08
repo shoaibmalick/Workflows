@@ -1,0 +1,411 @@
+{
+  "name": "Lead_Generation_Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leadgeneration",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        -192
+      ],
+      "id": "57e0c2af-e7e9-43f0-ae60-45aa80b0f629",
+      "name": "Webhook",
+      "webhookId": "c609a7fd-0271-4103-87b0-dd5118c9bdbb",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CQNIiHgHIMYZ4ydy",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "84dea53a-3a46-4f2b-815e-638070cba0c2",
+              "name": "lead_name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "a8ae5685-1532-4a65-ba95-f577ab539960",
+              "name": "lead_email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "5f16d7e7-2fdc-4395-a7bd-889e60bb2619",
+              "name": "Lead_phone",
+              "value": "={{ $json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "53594685-a579-497a-b211-4df940fae254",
+              "name": "lead_message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "8283c5e3-fca5-483e-b300-02255d725dff",
+              "name": "lead_course",
+              "value": "={{ $json.body.course }}",
+              "type": "string"
+            },
+            {
+              "id": "8df03232-df5e-4453-9d11-dcb1a57d208a",
+              "name": "=lead_priority",
+              "value": "={{ $json.body.course === \"IELTS\" ? \"High\" : \"Normal\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -192
+      ],
+      "id": "a8e2e946-1481-4ddf-bea1-9b57312d9308",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Basic input validation & sanitization\nconst unsafePattern = /<\\/?script.*?>/gi;\n\nfunction sanitize(value) {\n  if (typeof value !== 'string') return value;\n  return value.replace(unsafePattern, '').trim();\n}\n\nconst items = $input.all(); \n\n// Process each item \nfor (const item of items) \n{ \n  const json = item.json; \n  // Email format validation (basic) \n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/; \n\n  json.email_validation = 'passed';\n  if (!emailRegex.test(json.lead_email)) \n  { \n    json.email_validation = 'failed';  \n  }\n  \n  // Sanitize all string fields \n  \n  for (const key of Object.keys(json)) \n  { \n    json[key] = sanitize(json[key]); \n  }\n\n  // Mark lead as validated \n  json.validation_status = 'passed'; \n  } \n\n  return items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -192
+      ],
+      "id": "f10f05ef-b4f6-4144-ae0f-04a7f0305ef4",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1B6wuhjzh6NLQZB-BpCVMG7h_rax25LSb3qVggvUyDOE",
+          "mode": "list",
+          "cachedResultName": "LeadGeneration_n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1B6wuhjzh6NLQZB-BpCVMG7h_rax25LSb3qVggvUyDOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "n8n_leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1B6wuhjzh6NLQZB-BpCVMG7h_rax25LSb3qVggvUyDOE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "lead_name": "={{ $json.lead_name }}",
+            "lead_email": "={{ $json.lead_email }}",
+            "Lead_phone": "={{ $json.Lead_phone }}",
+            "lead_message": "={{ $json.lead_message }}",
+            "lead_course": "={{ $json.lead_course }}",
+            "lead_priority": "={{ $json.lead_priority }}",
+            "email_validation": "={{ $json.email_validation }}",
+            "validation_status": "={{ $json.validation_status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "lead_name",
+              "displayName": "lead_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead_phone",
+              "displayName": "Lead_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_email",
+              "displayName": "lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_message",
+              "displayName": "lead_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_course",
+              "displayName": "lead_course",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_priority",
+              "displayName": "lead_priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email_validation",
+              "displayName": "email_validation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "validation_status",
+              "displayName": "validation_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        -192
+      ],
+      "id": "e61e7540-8763-46f9-990b-c0f94f989e8a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YZCb6cgge2iJhFFK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "eafe2a84-5cd6-4cc4-985c-b2a7f61c2243",
+              "leftValue": "={{ $json.email_validation }}",
+              "rightValue": "passed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "0996c4ce-2afc-4abe-a199-7394cd650498",
+              "leftValue": "={{ $json.validation_status }}",
+              "rightValue": "passed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        -192
+      ],
+      "id": "7634b454-e7ad-44e4-8473-e773398f1811",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        992,
+        16
+      ],
+      "id": "5cfc65a7-9a53-402c-b7e5-679afde20163",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "N3ptRernn8hW32DN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Student Name:  {{ $json.lead_name }}\nCourse Interested: {{$json.lead_course}}\nPriority: {{$json.lead_priority}}\nStudent Message: {{$json.lead_message}}\n\nWrite a friendly confirmation message and ask for their preferred demo timing. You can also return the answer in HTML as we are sending an email to make it more beautiful.\n",
+        "options": {
+          "systemMessage": "Act as an admissions assistant for a tuition center.\n\nYour role:\n- Respond to students who book a free demo class\n- Be friendly, warm, and professional\n- Sound human, not robotic\n- Keep replies short (3–5 sentences)\n- Do not mention AI or automation\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1120,
+        -192
+      ],
+      "id": "427933a9-9114-4886-9a18-6abf0ee46007",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('If').item.json.lead_email }}",
+        "subject": "Tution Center Message",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1472,
+        -192
+      ],
+      "id": "be7a9717-2577-4f52-8f22-3e0c46edbc9b",
+      "name": "Send a message",
+      "webhookId": "c1dbce59-6d6c-4cc1-be6e-a643d79d2a55",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fFioGi2EjUIlwkfT",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "f3092e4d-2009-4593-a100-97e81e9a5d27",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cbecd77286d73e077db8db0d67eb575d2f553303747eac2913ccf23a0cb5635a"
+  },
+  "id": "fd288yWZojdbulE-_nUgK",
+  "tags": []
+}
